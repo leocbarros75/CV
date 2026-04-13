@@ -197,12 +197,14 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-    import { getDatabase, ref, push, remove, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    import {
+      getFirestore, collection, addDoc, deleteDoc,
+      doc, onSnapshot, getDocs, query, orderBy, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDYt42-EpCfjdvSGilWIvWxPQKakB_ee6o",
       authDomain: "immanuel-music-inventory.firebaseapp.com",
-      databaseURL: "https://immanuel-music-inventory-default-rtdb.firebaseio.com",
       projectId: "immanuel-music-inventory",
       storageBucket: "immanuel-music-inventory.firebasestorage.app",
       messagingSenderId: "368447755989",
@@ -228,8 +230,8 @@
     ];
 
     const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const inventoryRef = ref(db, 'inventory');
+    const db = getFirestore(app);
+    const inventoryCol = collection(db, 'inventory');
     const statusBar = document.getElementById('status-bar');
 
     function escapeHtml(str) {
@@ -256,37 +258,36 @@
           <td>${escapeHtml(item.year)}</td>
           <td>${escapeHtml(item.maintenance)}</td>
           <td>${escapeHtml(item.value)}</td>
-          <td><button class="btn-delete" onclick="window.deleteItem('${escapeHtml(item._key)}')" title="Delete">&#x2715;</button></td>
+          <td><button class="btn-delete" onclick="window.deleteItem('${escapeHtml(item._id)}')" title="Delete">&#x2715;</button></td>
         </tr>`
       ).join('');
     }
 
-    // Real-time listener — updates instantly on all open devices
-    let seeded = false;
-    onValue(inventoryRef, (snapshot) => {
-      statusBar.textContent = '';
-      if (!snapshot.exists() && !seeded) {
-        seeded = true;
+    // Seed defaults on first visit, then start real-time listener
+    getDocs(inventoryCol).then(snapshot => {
+      if (snapshot.empty) {
         statusBar.textContent = 'Setting up inventory for the first time\u2026';
-        Promise.all(DEFAULT_ITEMS.map(item => push(inventoryRef, item)))
-          .then(() => { statusBar.textContent = ''; });
-      } else if (snapshot.exists()) {
-        const items = [];
-        snapshot.forEach(child => {
-          items.push({ _key: child.key, ...child.val() });
-        });
-        renderTable(items);
+        Promise.all(
+          DEFAULT_ITEMS.map(item => addDoc(inventoryCol, { ...item, createdAt: serverTimestamp() }))
+        ).then(() => { statusBar.textContent = ''; });
       }
-    }, (error) => {
-      statusBar.className = 'status-bar error';
-      statusBar.textContent = 'Could not connect to database. Check your internet connection.';
-      console.error('Firebase error:', error);
+
+      // Real-time listener ordered by insertion time
+      const q = query(inventoryCol, orderBy('createdAt'));
+      onSnapshot(q, (snap) => {
+        const items = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+        renderTable(items);
+      }, (error) => {
+        statusBar.className = 'status-bar error';
+        statusBar.textContent = 'Could not connect to database. Check your internet connection.';
+        console.error('Firestore error:', error);
+      });
     });
 
     // Expose delete to inline onclick handlers
-    window.deleteItem = function(key) {
+    window.deleteItem = function(id) {
       if (confirm('Delete this item?')) {
-        remove(ref(db, 'inventory/' + key));
+        deleteDoc(doc(db, 'inventory', id));
       }
     };
 
@@ -299,9 +300,10 @@
         location:    document.getElementById('f-location').value.trim(),
         year:        document.getElementById('f-year').value.trim(),
         maintenance: document.getElementById('f-maintenance').value.trim(),
-        value:       document.getElementById('f-value').value.trim()
+        value:       document.getElementById('f-value').value.trim(),
+        createdAt:   serverTimestamp()
       };
-      push(inventoryRef, newItem).then(() => {
+      addDoc(inventoryCol, newItem).then(() => {
         e.target.reset();
         const msg = document.getElementById('msg-saved');
         msg.style.display = 'inline';
