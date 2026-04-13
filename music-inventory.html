@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Music Ministry Inventory - Immanuel Baptist</title>
 
   <style>
@@ -28,6 +29,7 @@
     table.inventory td {
       padding: 7px 10px;
       border: 1px solid #aad9bb;
+      word-break: break-word;
     }
     table.inventory tr:nth-child(even) td {
       background-color: #c8eeda;
@@ -46,6 +48,11 @@
     .back-link {
       margin-top: 20px;
       display: inline-block;
+    }
+    .loading {
+      color: #2a6640;
+      font-style: italic;
+      padding: 12px 0;
     }
 
     /* Add Item Form */
@@ -66,6 +73,14 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px 20px;
+    }
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      table.inventory {
+        font-size: 0.82em;
+      }
     }
     .form-grid label {
       display: flex;
@@ -120,6 +135,14 @@
       margin-left: 10px;
       font-style: italic;
     }
+    .status-bar {
+      font-size: 0.8em;
+      color: #555;
+      margin-top: 6px;
+    }
+    .status-bar.error {
+      color: #c0392b;
+    }
   </style>
 </head>
 
@@ -127,6 +150,8 @@
   <h1>Music Ministry Equipment Inventory</h1>
   <p><em>Immanuel Baptist Church</em></p>
   <hr>
+
+  <div class="status-bar" id="status-bar"></div>
 
   <table class="inventory" cellspacing="0">
     <thead>
@@ -143,14 +168,14 @@
       </tr>
     </thead>
     <tbody id="inventory-body">
-      <!-- Rows rendered by JavaScript -->
+      <tr><td colspan="9" class="loading">Loading inventory&hellip;</td></tr>
     </tbody>
   </table>
 
   <!-- Add Item Form -->
   <div class="add-form">
     <h2>Add New Item</h2>
-    <form id="add-item-form" onsubmit="handleAddItem(event)">
+    <form id="add-item-form">
       <div class="form-grid">
         <label>Item Name <input type="text" id="f-name" placeholder="e.g. Trumpet" required></label>
         <label>Purpose <input type="text" id="f-purpose" placeholder="e.g. Brass section / worship band" required></label>
@@ -170,10 +195,21 @@
   <br>
   <a class="back-link" href="index.html">&larr; Back to Main Page</a>
 
-  <script>
-    var STORAGE_KEY = 'imbc-music-inventory';
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getDatabase, ref, push, remove, onValue } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
-    var DEFAULT_ITEMS = [
+    const firebaseConfig = {
+      apiKey: "AIzaSyDYt42-EpCfjdvSGilWIvWxPQKakB_ee6o",
+      authDomain: "immanuel-music-inventory.firebaseapp.com",
+      databaseURL: "https://immanuel-music-inventory-default-rtdb.firebaseio.com",
+      projectId: "immanuel-music-inventory",
+      storageBucket: "immanuel-music-inventory.firebasestorage.app",
+      messagingSenderId: "368447755989",
+      appId: "1:368447755989:web:6b3b5e6cd8cbda65ea345c"
+    };
+
+    const DEFAULT_ITEMS = [
       { name: 'Grand Piano', purpose: 'Worship accompaniment / solos', qty: '1', location: 'Sanctuary', year: '2015', maintenance: 'Annual tuning & regulation', value: '$12,000' },
       { name: 'Digital Drum Kit', purpose: 'Rhythm / percussion for worship band', qty: '1', location: 'Stage / Sanctuary', year: '2019', maintenance: 'Annual inspection; pad replacement as needed', value: '$2,500' },
       { name: 'Electric Guitar', purpose: 'Lead guitar for worship band', qty: '2', location: 'Music Room', year: '2018', maintenance: 'String replacement every 3 months; annual setup', value: '$900' },
@@ -191,19 +227,10 @@
       { name: 'Choir Robes', purpose: 'Uniform attire for choir', qty: '30', location: 'Choir Room', year: '2018', maintenance: 'Dry clean annually; inspect for wear', value: '$2,400' }
     ];
 
-    function loadItems() {
-      var stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        try { return JSON.parse(stored); } catch (e) {}
-      }
-      // First visit: seed with defaults and save
-      saveItems(DEFAULT_ITEMS);
-      return DEFAULT_ITEMS.slice();
-    }
-
-    function saveItems(items) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    }
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const inventoryRef = ref(db, 'inventory');
+    const statusBar = document.getElementById('status-bar');
 
     function escapeHtml(str) {
       return String(str)
@@ -213,30 +240,59 @@
         .replace(/"/g, '&quot;');
     }
 
-    function renderTable() {
-      var items = loadItems();
-      var tbody = document.getElementById('inventory-body');
-      var html = '';
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        html += '<tr>' +
-          '<td>' + (i + 1) + '</td>' +
-          '<td>' + escapeHtml(item.name) + '</td>' +
-          '<td>' + escapeHtml(item.purpose) + '</td>' +
-          '<td>' + escapeHtml(item.qty) + '</td>' +
-          '<td>' + escapeHtml(item.location) + '</td>' +
-          '<td>' + escapeHtml(item.year) + '</td>' +
-          '<td>' + escapeHtml(item.maintenance) + '</td>' +
-          '<td>' + escapeHtml(item.value) + '</td>' +
-          '<td><button class="btn-delete" onclick="deleteItem(' + i + ')" title="Delete">&#x2715;</button></td>' +
-          '</tr>';
+    function renderTable(items) {
+      const tbody = document.getElementById('inventory-body');
+      if (items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="loading">No items yet. Add one below.</td></tr>';
+        return;
       }
-      tbody.innerHTML = html;
+      tbody.innerHTML = items.map((item, i) =>
+        `<tr>
+          <td>${i + 1}</td>
+          <td>${escapeHtml(item.name)}</td>
+          <td>${escapeHtml(item.purpose)}</td>
+          <td>${escapeHtml(item.qty)}</td>
+          <td>${escapeHtml(item.location)}</td>
+          <td>${escapeHtml(item.year)}</td>
+          <td>${escapeHtml(item.maintenance)}</td>
+          <td>${escapeHtml(item.value)}</td>
+          <td><button class="btn-delete" onclick="window.deleteItem('${escapeHtml(item._key)}')" title="Delete">&#x2715;</button></td>
+        </tr>`
+      ).join('');
     }
 
-    function handleAddItem(event) {
-      event.preventDefault();
-      var newItem = {
+    // Real-time listener — updates instantly on all open devices
+    let seeded = false;
+    onValue(inventoryRef, (snapshot) => {
+      statusBar.textContent = '';
+      if (!snapshot.exists() && !seeded) {
+        seeded = true;
+        statusBar.textContent = 'Setting up inventory for the first time\u2026';
+        Promise.all(DEFAULT_ITEMS.map(item => push(inventoryRef, item)))
+          .then(() => { statusBar.textContent = ''; });
+      } else if (snapshot.exists()) {
+        const items = [];
+        snapshot.forEach(child => {
+          items.push({ _key: child.key, ...child.val() });
+        });
+        renderTable(items);
+      }
+    }, (error) => {
+      statusBar.className = 'status-bar error';
+      statusBar.textContent = 'Could not connect to database. Check your internet connection.';
+      console.error('Firebase error:', error);
+    });
+
+    // Expose delete to inline onclick handlers
+    window.deleteItem = function(key) {
+      if (confirm('Delete this item?')) {
+        remove(ref(db, 'inventory/' + key));
+      }
+    };
+
+    document.getElementById('add-item-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const newItem = {
         name:        document.getElementById('f-name').value.trim(),
         purpose:     document.getElementById('f-purpose').value.trim(),
         qty:         document.getElementById('f-qty').value.trim(),
@@ -245,25 +301,13 @@
         maintenance: document.getElementById('f-maintenance').value.trim(),
         value:       document.getElementById('f-value').value.trim()
       };
-      var items = loadItems();
-      items.push(newItem);
-      saveItems(items);
-      renderTable();
-      document.getElementById('add-item-form').reset();
-      var msg = document.getElementById('msg-saved');
-      msg.style.display = 'inline';
-      setTimeout(function() { msg.style.display = 'none'; }, 2000);
-    }
-
-    function deleteItem(index) {
-      var items = loadItems();
-      items.splice(index, 1);
-      saveItems(items);
-      renderTable();
-    }
-
-    // Initial render
-    renderTable();
+      push(inventoryRef, newItem).then(() => {
+        e.target.reset();
+        const msg = document.getElementById('msg-saved');
+        msg.style.display = 'inline';
+        setTimeout(() => { msg.style.display = 'none'; }, 2000);
+      });
+    });
   </script>
 </body>
 
