@@ -4,201 +4,445 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Music Ministry Inventory - Immanuel Baptist</title>
+  <title>Music Ministry Inventory — Immanuel Baptist</title>
 
   <style>
-    body {
-      background-color: #DEF5E5;
-      font-family: Arial, sans-serif;
+    :root {
+      --green-900: #1B4332;
+      --green-700: #2D6A4F;
+      --green-500: #52B788;
+      --green-200: #95D5B2;
+      --green-100: #D8F3DC;
+      --green-50:  #F0FFF4;
+      --white:     #FFFFFF;
+      --gray-50:   #F8FAFC;
+      --gray-100:  #F1F5F9;
+      --gray-200:  #E2E8F0;
+      --gray-500:  #64748B;
+      --gray-700:  #334155;
+      --gray-900:  #0F172A;
+      --red-500:   #EF4444;
+      --red-100:   #FEE2E2;
+      --shadow:    0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.07);
+      --radius:    8px;
+      --radius-lg: 12px;
     }
-    h1 {
-      font-size: 1.4em;
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--green-50);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--gray-900);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ─────────────────────────────── */
+    .site-header {
+      background: var(--green-900);
+      color: var(--white);
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .logo-wrap {
+      background: rgba(255,255,255,0.12);
+      border-radius: 50%;
+      width: 58px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .logo-wrap img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      mix-blend-mode: screen;
+    }
+    .header-text h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .header-text p {
+      margin: 3px 0 0;
+      font-size: 0.82rem;
+      opacity: 0.65;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    /* ── MAIN ───────────────────────────────── */
+    .main {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+    }
+
+    /* ── STATS ──────────────────────────────── */
+    .stats-bar {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .stat-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 16px 22px;
+      box-shadow: var(--shadow);
+      flex: 1;
+      min-width: 150px;
+      border-left: 4px solid var(--green-500);
+    }
+    .stat-value {
+      display: block;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--green-700);
+      line-height: 1;
+      margin-bottom: 5px;
+      letter-spacing: -0.02em;
+    }
+    .stat-label {
+      font-size: 0.72rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-weight: 600;
+    }
+
+    /* ── STATUS BAR ─────────────────────────── */
+    .status-bar {
+      font-size: 0.82rem;
+      color: var(--gray-500);
+      margin-bottom: 10px;
+      min-height: 1.2em;
+    }
+    .status-bar.error { color: var(--red-500); font-weight: 500; }
+
+    /* ── TABLE ──────────────────────────────── */
+    .table-wrapper {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      overflow-x: auto;
     }
     table.inventory {
       border-collapse: collapse;
       width: 100%;
-      margin-top: 16px;
+      min-width: 720px;
     }
-    table.inventory th {
-      background-color: #6DBF8A;
-      color: #fff;
-      padding: 8px 10px;
+    table.inventory thead th {
+      background: var(--green-700);
+      color: var(--white);
+      padding: 13px 14px;
       text-align: left;
-      border: 1px solid #4a9a66;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
     }
-    table.inventory td {
-      padding: 7px 10px;
-      border: 1px solid #aad9bb;
-      word-break: break-word;
+    table.inventory tbody td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--gray-100);
+      font-size: 0.875rem;
+      vertical-align: middle;
     }
-    table.inventory tr:nth-child(even) td {
-      background-color: #c8eeda;
-    }
-    table.inventory tr:hover td {
-      background-color: #b0e0c8;
-    }
-    hr {
-      border-style: none;
-      border-top-style: dotted;
-      border-color: grey;
-      border-width: 6px;
-      width: 7%;
-      margin-left: 0;
-    }
-    .back-link {
-      margin-top: 20px;
-      display: inline-block;
-    }
-    .loading {
-      color: #2a6640;
-      font-style: italic;
-      padding: 12px 0;
-    }
+    table.inventory tbody tr:last-child td { border-bottom: none; }
+    table.inventory tbody tr:hover td { background: var(--green-50); transition: background 0.1s; }
+    .item-name { font-weight: 600; color: var(--gray-900); }
+    .item-value { font-weight: 700; color: var(--green-700); }
+    .row-num { color: var(--gray-500); font-size: 0.8rem; }
 
-    /* Add Item Form */
-    .add-form {
-      background-color: #c8eeda;
-      border: 1px solid #4a9a66;
-      border-radius: 6px;
-      padding: 16px 20px;
-      margin-top: 28px;
-      max-width: 800px;
+    /* ── ACTION BUTTONS ─────────────────────── */
+    .actions { display: flex; gap: 5px; white-space: nowrap; }
+    .btn-edit, .btn-delete {
+      border-radius: 5px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      cursor: pointer;
+      border: 1px solid;
+      transition: background 0.12s, border-color 0.12s;
+      letter-spacing: 0.02em;
     }
-    .add-form h2 {
-      font-size: 1em;
-      margin: 0 0 12px 0;
-      color: #2a6640;
+    .btn-edit  { background: var(--white); color: var(--green-700); border-color: var(--green-200); }
+    .btn-edit:hover  { background: var(--green-100); border-color: var(--green-500); }
+    .btn-delete { background: var(--white); color: var(--red-500); border-color: #FECACA; }
+    .btn-delete:hover { background: var(--red-100); }
+
+    /* ── ADD FORM ───────────────────────────── */
+    .add-form {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 22px 26px;
+      margin-top: 22px;
+    }
+    .section-title {
+      margin: 0 0 16px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--green-900);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
     }
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px 20px;
-    }
-    @media (max-width: 600px) {
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-      table.inventory {
-        font-size: 0.82em;
-      }
+      gap: 12px 22px;
     }
     .form-grid label {
       display: flex;
       flex-direction: column;
-      font-size: 0.85em;
-      font-weight: bold;
-      color: #2a6640;
-      gap: 3px;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
     .form-grid input {
-      padding: 5px 7px;
-      border: 1px solid #4a9a66;
-      border-radius: 4px;
-      font-size: 0.9em;
-      background-color: #f0fbf4;
+      padding: 9px 11px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      color: var(--gray-900);
+      background: var(--gray-50);
+      transition: border 0.15s, box-shadow 0.15s;
     }
     .form-grid input:focus {
-      outline: 2px solid #6DBF8A;
-      background-color: #fff;
+      outline: none;
+      border-color: var(--green-500);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(82,183,136,0.18);
     }
     .form-actions {
-      margin-top: 12px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .btn-add {
-      background-color: #6DBF8A;
-      color: #fff;
+    .btn-primary {
+      background: var(--green-700);
+      color: var(--white);
       border: none;
-      padding: 8px 22px;
-      border-radius: 4px;
-      font-size: 0.95em;
+      padding: 10px 28px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
       cursor: pointer;
+      letter-spacing: 0.02em;
+      transition: background 0.15s;
     }
-    .btn-add:hover {
-      background-color: #4a9a66;
-    }
-    .btn-delete {
-      background: none;
-      border: none;
-      color: #c0392b;
-      cursor: pointer;
-      font-size: 1em;
-      padding: 2px 6px;
-      border-radius: 3px;
-    }
-    .btn-delete:hover {
-      background-color: #fdecea;
-    }
+    .btn-primary:hover { background: var(--green-900); }
     .msg-saved {
       display: none;
-      color: #2a6640;
-      font-size: 0.85em;
-      margin-left: 10px;
+      color: var(--green-700);
+      font-size: 0.83rem;
       font-style: italic;
     }
-    .status-bar {
-      font-size: 0.8em;
-      color: #555;
-      margin-top: 6px;
+
+    /* ── EDIT MODAL ─────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 16px;
     }
-    .status-bar.error {
-      color: #c0392b;
+    .modal-overlay.hidden { display: none; }
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 26px 28px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green-900);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.3rem;
+      cursor: pointer;
+      color: var(--gray-500);
+      line-height: 1;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .modal-close:hover { background: var(--gray-100); color: var(--gray-900); }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .btn-secondary {
+      background: none;
+      color: var(--gray-500);
+      border: 1px solid var(--gray-200);
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .btn-secondary:hover { background: var(--gray-100); }
+
+    /* ── BACK LINK ──────────────────────────── */
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--green-700);
+      font-size: 0.875rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .back-link:hover { text-decoration: underline; }
+
+    /* ── RESPONSIVE ─────────────────────────── */
+    @media (max-width: 620px) {
+      .site-header { padding: 14px 16px; gap: 12px; }
+      .logo-wrap { width: 46px; height: 46px; }
+      .logo-wrap img { width: 36px; height: 36px; }
+      .header-text h1 { font-size: 1rem; }
+      .main { padding: 16px 12px 36px; }
+      .stats-bar { gap: 10px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .add-form, .modal { padding: 18px 16px; }
+      table.inventory thead th,
+      table.inventory tbody td { padding: 10px 10px; font-size: 0.8rem; }
     }
   </style>
 </head>
 
 <body>
-  <h1>Music Ministry Equipment Inventory</h1>
-  <p><em>Immanuel Baptist Church</em></p>
-  <hr>
 
-  <div class="status-bar" id="status-bar"></div>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="logo-wrap">
+      <img src="church-logo.png" alt="Immanuel Baptist Church">
+    </div>
+    <div class="header-text">
+      <h1>Music Ministry Equipment Inventory</h1>
+      <p>Immanuel Baptist Church</p>
+    </div>
+  </header>
 
-  <table class="inventory" cellspacing="0">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Item Name</th>
-        <th>Purpose</th>
-        <th>Qty</th>
-        <th>Location</th>
-        <th>Purchase Year</th>
-        <th>Maintenance Schedule</th>
-        <th>Value (USD)</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="inventory-body">
-      <tr><td colspan="9" class="loading">Loading inventory&hellip;</td></tr>
-    </tbody>
-  </table>
+  <div class="main">
 
-  <!-- Add Item Form -->
-  <div class="add-form">
-    <h2>Add New Item</h2>
-    <form id="add-item-form">
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <span class="stat-value" id="total-items">—</span>
+        <span class="stat-label">Items on Record</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="total-value">—</span>
+        <span class="stat-label">Total Equipment Value</span>
+      </div>
+    </div>
+
+    <div class="status-bar" id="status-bar"></div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <table class="inventory">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Item Name</th>
+            <th>Purpose</th>
+            <th>Qty</th>
+            <th>Location</th>
+            <th>Year</th>
+            <th>Maintenance</th>
+            <th>Value (USD)</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="inventory-body">
+          <tr><td colspan="9" style="text-align:center;padding:28px;color:#64748B;font-style:italic">Loading inventory&hellip;</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ADD FORM -->
+    <div class="add-form">
+      <p class="section-title">Add New Item</p>
+      <form id="add-item-form">
+        <div class="form-grid">
+          <label>Item Name     <input type="text"   id="f-name"        placeholder="e.g. Trumpet"              required></label>
+          <label>Purpose       <input type="text"   id="f-purpose"     placeholder="e.g. Brass section"        required></label>
+          <label>Quantity      <input type="number" id="f-qty"         placeholder="1" min="1"                 required></label>
+          <label>Location      <input type="text"   id="f-location"    placeholder="e.g. Music Room"           required></label>
+          <label>Purchase Year <input type="number" id="f-year"        placeholder="2024" min="1900" max="2100" required></label>
+          <label>Maintenance   <input type="text"   id="f-maintenance" placeholder="e.g. Annual inspection"    required></label>
+          <label>Value (USD)   <input type="text"   id="f-value"       placeholder="e.g. $500"                 required></label>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Add Item</button>
+          <span class="msg-saved" id="msg-saved">Saved!</span>
+        </div>
+      </form>
+    </div>
+
+    <a class="back-link" href="index.html">&larr; Back to Main Page</a>
+
+  </div><!-- /main -->
+
+  <!-- EDIT MODAL -->
+  <div class="modal-overlay hidden" id="edit-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Edit Item</h2>
+        <button class="modal-close" id="modal-close" title="Close">&times;</button>
+      </div>
       <div class="form-grid">
-        <label>Item Name <input type="text" id="f-name" placeholder="e.g. Trumpet" required></label>
-        <label>Purpose <input type="text" id="f-purpose" placeholder="e.g. Brass section / worship band" required></label>
-        <label>Quantity <input type="number" id="f-qty" placeholder="1" min="1" required></label>
-        <label>Location <input type="text" id="f-location" placeholder="e.g. Music Room" required></label>
-        <label>Purchase Year <input type="number" id="f-year" placeholder="2024" min="1900" max="2100" required></label>
-        <label>Maintenance Schedule <input type="text" id="f-maintenance" placeholder="e.g. Annual inspection" required></label>
-        <label>Value (USD) <input type="text" id="f-value" placeholder="e.g. $500" required></label>
+        <label>Item Name     <input type="text"   id="e-name"        required></label>
+        <label>Purpose       <input type="text"   id="e-purpose"     required></label>
+        <label>Quantity      <input type="number" id="e-qty"         min="1"  required></label>
+        <label>Location      <input type="text"   id="e-location"    required></label>
+        <label>Purchase Year <input type="number" id="e-year"        min="1900" max="2100" required></label>
+        <label>Maintenance   <input type="text"   id="e-maintenance" required></label>
+        <label>Value (USD)   <input type="text"   id="e-value"       required></label>
       </div>
-      <div class="form-actions">
-        <button type="submit" class="btn-add">Add Item</button>
-        <span class="msg-saved" id="msg-saved">Saved!</span>
+      <div class="modal-actions">
+        <button class="btn-primary"   id="modal-save">Save Changes</button>
+        <button class="btn-secondary" id="modal-cancel">Cancel</button>
       </div>
-    </form>
+    </div>
   </div>
-
-  <br>
-  <a class="back-link" href="index.html">&larr; Back to Main Page</a>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
     import {
-      getFirestore, collection, addDoc, deleteDoc,
+      getFirestore, collection, addDoc, deleteDoc, updateDoc,
       doc, onSnapshot, getDocs, query, orderBy, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
@@ -212,86 +456,102 @@
     };
 
     const DEFAULT_ITEMS = [
-      { name: 'Grand Piano', purpose: 'Worship accompaniment / solos', qty: '1', location: 'Sanctuary', year: '2015', maintenance: 'Annual tuning & regulation', value: '$12,000' },
-      { name: 'Digital Drum Kit', purpose: 'Rhythm / percussion for worship band', qty: '1', location: 'Stage / Sanctuary', year: '2019', maintenance: 'Annual inspection; pad replacement as needed', value: '$2,500' },
-      { name: 'Electric Guitar', purpose: 'Lead guitar for worship band', qty: '2', location: 'Music Room', year: '2018', maintenance: 'String replacement every 3 months; annual setup', value: '$900' },
-      { name: 'Bass Guitar', purpose: 'Bass line for worship band', qty: '1', location: 'Music Room', year: '2018', maintenance: 'String replacement every 6 months; annual setup', value: '$750' },
-      { name: 'Acoustic Guitar', purpose: 'Acoustic worship sets / small groups', qty: '2', location: 'Music Room', year: '2020', maintenance: 'String replacement every 3 months', value: '$600' },
-      { name: 'Violin', purpose: 'Orchestral worship / special music', qty: '3', location: 'Music Room', year: '2017', maintenance: 'Bow re-hairing annually; bridge & string check every 6 months', value: '$1,200' },
-      { name: 'Viola', purpose: 'Orchestral worship / special music', qty: '2', location: 'Music Room', year: '2017', maintenance: 'Bow re-hairing annually; string replacement every 6 months', value: '$1,000' },
-      { name: 'PA System (Main)', purpose: 'Sound reinforcement for sanctuary', qty: '1', location: 'Sanctuary', year: '2016', maintenance: 'Semi-annual inspection; cable check monthly', value: '$8,000' },
-      { name: 'Digital Mixing Console', purpose: 'Audio mixing for live worship', qty: '1', location: 'Sound Booth', year: '2020', maintenance: 'Firmware updates as released; annual cleaning', value: '$3,500' },
-      { name: 'Wireless Microphone System', purpose: 'Vocals / handheld mics for worship leaders', qty: '4', location: 'Sound Booth', year: '2021', maintenance: 'Battery replacement weekly; transmitter check monthly', value: '$2,800' },
-      { name: 'Wired Microphone (SM58)', purpose: 'Backup vocals / choir mics', qty: '6', location: 'Sound Booth', year: '2018', maintenance: 'Capsule cleaning every 6 months', value: '$660' },
-      { name: 'Monitor Speakers (Stage)', purpose: 'In-ear / stage monitors for musicians', qty: '4', location: 'Stage / Sanctuary', year: '2019', maintenance: 'Annual inspection; driver check every 6 months', value: '$1,600' },
-      { name: 'Keyboard / Synthesizer', purpose: 'Keys / pads for worship band', qty: '1', location: 'Stage / Sanctuary', year: '2022', maintenance: 'Software/firmware updates; annual cleaning', value: '$1,800' },
-      { name: 'Music Stands', purpose: 'Sheet music support for choir & orchestra', qty: '20', location: 'Choir Room', year: '2016', maintenance: 'Inspect for stability annually', value: '$600' },
-      { name: 'Choir Robes', purpose: 'Uniform attire for choir', qty: '30', location: 'Choir Room', year: '2018', maintenance: 'Dry clean annually; inspect for wear', value: '$2,400' }
+      { name: 'Grand Piano',              purpose: 'Worship accompaniment / solos',           qty: '1',  location: 'Sanctuary',       year: '2015', maintenance: 'Annual tuning & regulation',                                    value: '$12,000' },
+      { name: 'Digital Drum Kit',         purpose: 'Rhythm / percussion for worship band',     qty: '1',  location: 'Stage / Sanctuary',year: '2019', maintenance: 'Annual inspection; pad replacement as needed',                 value: '$2,500'  },
+      { name: 'Electric Guitar',          purpose: 'Lead guitar for worship band',             qty: '2',  location: 'Music Room',       year: '2018', maintenance: 'String replacement every 3 months; annual setup',              value: '$900'    },
+      { name: 'Bass Guitar',              purpose: 'Bass line for worship band',               qty: '1',  location: 'Music Room',       year: '2018', maintenance: 'String replacement every 6 months; annual setup',              value: '$750'    },
+      { name: 'Acoustic Guitar',          purpose: 'Acoustic worship sets / small groups',     qty: '2',  location: 'Music Room',       year: '2020', maintenance: 'String replacement every 3 months',                           value: '$600'    },
+      { name: 'Violin',                   purpose: 'Orchestral worship / special music',       qty: '3',  location: 'Music Room',       year: '2017', maintenance: 'Bow re-hairing annually; bridge & string check every 6 months',value: '$1,200'  },
+      { name: 'Viola',                    purpose: 'Orchestral worship / special music',       qty: '2',  location: 'Music Room',       year: '2017', maintenance: 'Bow re-hairing annually; string replacement every 6 months',   value: '$1,000'  },
+      { name: 'PA System (Main)',         purpose: 'Sound reinforcement for sanctuary',        qty: '1',  location: 'Sanctuary',        year: '2016', maintenance: 'Semi-annual inspection; cable check monthly',                  value: '$8,000'  },
+      { name: 'Digital Mixing Console',   purpose: 'Audio mixing for live worship',            qty: '1',  location: 'Sound Booth',      year: '2020', maintenance: 'Firmware updates as released; annual cleaning',                value: '$3,500'  },
+      { name: 'Wireless Microphone System',purpose:'Vocals / handheld mics for worship leaders',qty:'4', location: 'Sound Booth',      year: '2021', maintenance: 'Battery replacement weekly; transmitter check monthly',         value: '$2,800'  },
+      { name: 'Wired Microphone (SM58)',  purpose: 'Backup vocals / choir mics',              qty: '6',  location: 'Sound Booth',      year: '2018', maintenance: 'Capsule cleaning every 6 months',                             value: '$660'    },
+      { name: 'Monitor Speakers (Stage)', purpose: 'In-ear / stage monitors for musicians',   qty: '4',  location: 'Stage / Sanctuary',year: '2019', maintenance: 'Annual inspection; driver check every 6 months',              value: '$1,600'  },
+      { name: 'Keyboard / Synthesizer',   purpose: 'Keys / pads for worship band',            qty: '1',  location: 'Stage / Sanctuary',year: '2022', maintenance: 'Software/firmware updates; annual cleaning',                  value: '$1,800'  },
+      { name: 'Music Stands',             purpose: 'Sheet music support for choir & orchestra',qty: '20', location: 'Choir Room',       year: '2016', maintenance: 'Inspect for stability annually',                              value: '$600'    },
+      { name: 'Choir Robes',              purpose: 'Uniform attire for choir',                qty: '30', location: 'Choir Room',       year: '2018', maintenance: 'Dry clean annually; inspect for wear',                        value: '$2,400'  }
     ];
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const inventoryCol = collection(db, 'inventory');
+    const app  = initializeApp(firebaseConfig);
+    const db   = getFirestore(app);
+    const col  = collection(db, 'inventory');
     const statusBar = document.getElementById('status-bar');
+    let   currentItems = [];
+    let   editingId    = null;
 
-    function escapeHtml(str) {
+    /* ── Helpers ───────────────────────── */
+    function esc(str) {
       return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
     }
 
+    function parseValue(str) {
+      const n = parseFloat(String(str).replace(/[$,\s]/g, ''));
+      return isNaN(n) ? 0 : n;
+    }
+
+    /* ── Stats ─────────────────────────── */
+    function updateStats(items) {
+      document.getElementById('total-items').textContent = items.length;
+      const total = items.reduce((s, it) => s + parseValue(it.value), 0);
+      document.getElementById('total-value').textContent =
+        '$' + total.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+    }
+
+    /* ── Render ────────────────────────── */
     function renderTable(items) {
       const tbody = document.getElementById('inventory-body');
-      if (items.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="loading">No items yet. Add one below.</td></tr>';
+      if (!items.length) {
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:28px;color:#64748B;font-style:italic">No items yet. Add one below.</td></tr>';
+        updateStats([]);
         return;
       }
       tbody.innerHTML = items.map((item, i) =>
         `<tr>
-          <td>${i + 1}</td>
-          <td>${escapeHtml(item.name)}</td>
-          <td>${escapeHtml(item.purpose)}</td>
-          <td>${escapeHtml(item.qty)}</td>
-          <td>${escapeHtml(item.location)}</td>
-          <td>${escapeHtml(item.year)}</td>
-          <td>${escapeHtml(item.maintenance)}</td>
-          <td>${escapeHtml(item.value)}</td>
-          <td><button class="btn-delete" onclick="window.deleteItem('${escapeHtml(item._id)}')" title="Delete">&#x2715;</button></td>
+          <td class="row-num">${i + 1}</td>
+          <td class="item-name">${esc(item.name)}</td>
+          <td>${esc(item.purpose)}</td>
+          <td>${esc(item.qty)}</td>
+          <td>${esc(item.location)}</td>
+          <td>${esc(item.year)}</td>
+          <td>${esc(item.maintenance)}</td>
+          <td class="item-value">${esc(item.value)}</td>
+          <td>
+            <div class="actions">
+              <button class="btn-edit"   onclick="window.openEdit('${esc(item._id)}')">Edit</button>
+              <button class="btn-delete" onclick="window.removeItem('${esc(item._id)}')">Delete</button>
+            </div>
+          </td>
         </tr>`
       ).join('');
+      updateStats(items);
     }
 
-    // Seed defaults on first visit, then start real-time listener
-    getDocs(inventoryCol).then(snapshot => {
+    /* ── Seed + Listen ─────────────────── */
+    getDocs(col).then(snapshot => {
       if (snapshot.empty) {
         statusBar.textContent = 'Setting up inventory for the first time\u2026';
         Promise.all(
-          DEFAULT_ITEMS.map(item => addDoc(inventoryCol, { ...item, createdAt: serverTimestamp() }))
+          DEFAULT_ITEMS.map(item => addDoc(col, { ...item, createdAt: serverTimestamp() }))
         ).then(() => { statusBar.textContent = ''; });
       }
 
-      // Real-time listener ordered by insertion time
-      const q = query(inventoryCol, orderBy('createdAt'));
-      onSnapshot(q, (snap) => {
-        const items = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
-        renderTable(items);
-      }, (error) => {
+      // Newest items at the top
+      const q = query(col, orderBy('createdAt', 'desc'));
+      onSnapshot(q, snap => {
+        currentItems = snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+        renderTable(currentItems);
+      }, err => {
         statusBar.className = 'status-bar error';
         statusBar.textContent = 'Could not connect to database. Check your internet connection.';
-        console.error('Firestore error:', error);
+        console.error(err);
       });
     });
 
-    // Expose delete to inline onclick handlers
-    window.deleteItem = function(id) {
-      if (confirm('Delete this item?')) {
-        deleteDoc(doc(db, 'inventory', id));
-      }
-    };
-
-    document.getElementById('add-item-form').addEventListener('submit', function(e) {
+    /* ── Add ───────────────────────────── */
+    document.getElementById('add-item-form').addEventListener('submit', e => {
       e.preventDefault();
       const newItem = {
         name:        document.getElementById('f-name').value.trim(),
@@ -303,14 +563,59 @@
         value:       document.getElementById('f-value').value.trim(),
         createdAt:   serverTimestamp()
       };
-      addDoc(inventoryCol, newItem).then(() => {
+      addDoc(col, newItem).then(() => {
         e.target.reset();
         const msg = document.getElementById('msg-saved');
         msg.style.display = 'inline';
         setTimeout(() => { msg.style.display = 'none'; }, 2000);
       });
     });
-  </script>
-</body>
 
+    /* ── Edit modal ────────────────────── */
+    function openModal()  { document.getElementById('edit-modal').classList.remove('hidden'); }
+    function closeModal() { document.getElementById('edit-modal').classList.add('hidden'); editingId = null; }
+
+    window.openEdit = function(id) {
+      const item = currentItems.find(it => it._id === id);
+      if (!item) return;
+      editingId = id;
+      document.getElementById('e-name').value        = item.name        || '';
+      document.getElementById('e-purpose').value     = item.purpose     || '';
+      document.getElementById('e-qty').value         = item.qty         || '';
+      document.getElementById('e-location').value    = item.location    || '';
+      document.getElementById('e-year').value        = item.year        || '';
+      document.getElementById('e-maintenance').value = item.maintenance || '';
+      document.getElementById('e-value').value       = item.value       || '';
+      openModal();
+    };
+
+    document.getElementById('modal-cancel').addEventListener('click', closeModal);
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('edit-modal').addEventListener('click', e => {
+      if (e.target === document.getElementById('edit-modal')) closeModal();
+    });
+
+    document.getElementById('modal-save').addEventListener('click', () => {
+      if (!editingId) return;
+      const updated = {
+        name:        document.getElementById('e-name').value.trim(),
+        purpose:     document.getElementById('e-purpose').value.trim(),
+        qty:         document.getElementById('e-qty').value.trim(),
+        location:    document.getElementById('e-location').value.trim(),
+        year:        document.getElementById('e-year').value.trim(),
+        maintenance: document.getElementById('e-maintenance').value.trim(),
+        value:       document.getElementById('e-value').value.trim(),
+      };
+      updateDoc(doc(db, 'inventory', editingId), updated).then(closeModal);
+    });
+
+    /* ── Delete ────────────────────────── */
+    window.removeItem = function(id) {
+      if (confirm('Delete this item from the inventory?')) {
+        deleteDoc(doc(db, 'inventory', id));
+      }
+    };
+  </script>
+
+</body>
 </html>
