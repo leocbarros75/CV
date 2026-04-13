@@ -47,6 +47,79 @@
       margin-top: 20px;
       display: inline-block;
     }
+
+    /* Add Item Form */
+    .add-form {
+      background-color: #c8eeda;
+      border: 1px solid #4a9a66;
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin-top: 28px;
+      max-width: 800px;
+    }
+    .add-form h2 {
+      font-size: 1em;
+      margin: 0 0 12px 0;
+      color: #2a6640;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+    }
+    .form-grid label {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.85em;
+      font-weight: bold;
+      color: #2a6640;
+      gap: 3px;
+    }
+    .form-grid input {
+      padding: 5px 7px;
+      border: 1px solid #4a9a66;
+      border-radius: 4px;
+      font-size: 0.9em;
+      background-color: #f0fbf4;
+    }
+    .form-grid input:focus {
+      outline: 2px solid #6DBF8A;
+      background-color: #fff;
+    }
+    .form-actions {
+      margin-top: 12px;
+    }
+    .btn-add {
+      background-color: #6DBF8A;
+      color: #fff;
+      border: none;
+      padding: 8px 22px;
+      border-radius: 4px;
+      font-size: 0.95em;
+      cursor: pointer;
+    }
+    .btn-add:hover {
+      background-color: #4a9a66;
+    }
+    .btn-delete {
+      background: none;
+      border: none;
+      color: #c0392b;
+      cursor: pointer;
+      font-size: 1em;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .btn-delete:hover {
+      background-color: #fdecea;
+    }
+    .msg-saved {
+      display: none;
+      color: #2a6640;
+      font-size: 0.85em;
+      margin-left: 10px;
+      font-style: italic;
+    }
   </style>
 </head>
 
@@ -66,165 +139,132 @@
         <th>Purchase Year</th>
         <th>Maintenance Schedule</th>
         <th>Value (USD)</th>
+        <th></th>
       </tr>
     </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Grand Piano</td>
-        <td>Worship accompaniment / solos</td>
-        <td>1</td>
-        <td>Sanctuary</td>
-        <td>2015</td>
-        <td>Annual tuning &amp; regulation</td>
-        <td>$12,000</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Digital Drum Kit</td>
-        <td>Rhythm / percussion for worship band</td>
-        <td>1</td>
-        <td>Stage / Sanctuary</td>
-        <td>2019</td>
-        <td>Annual inspection; pad replacement as needed</td>
-        <td>$2,500</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Electric Guitar</td>
-        <td>Lead guitar for worship band</td>
-        <td>2</td>
-        <td>Music Room</td>
-        <td>2018</td>
-        <td>String replacement every 3 months; annual setup</td>
-        <td>$900</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>Bass Guitar</td>
-        <td>Bass line for worship band</td>
-        <td>1</td>
-        <td>Music Room</td>
-        <td>2018</td>
-        <td>String replacement every 6 months; annual setup</td>
-        <td>$750</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>Acoustic Guitar</td>
-        <td>Acoustic worship sets / small groups</td>
-        <td>2</td>
-        <td>Music Room</td>
-        <td>2020</td>
-        <td>String replacement every 3 months</td>
-        <td>$600</td>
-      </tr>
-      <tr>
-        <td>6</td>
-        <td>Violin</td>
-        <td>Orchestral worship / special music</td>
-        <td>3</td>
-        <td>Music Room</td>
-        <td>2017</td>
-        <td>Bow re-hairing annually; bridge &amp; string check every 6 months</td>
-        <td>$1,200</td>
-      </tr>
-      <tr>
-        <td>7</td>
-        <td>Viola</td>
-        <td>Orchestral worship / special music</td>
-        <td>2</td>
-        <td>Music Room</td>
-        <td>2017</td>
-        <td>Bow re-hairing annually; string replacement every 6 months</td>
-        <td>$1,000</td>
-      </tr>
-      <tr>
-        <td>8</td>
-        <td>PA System (Main)</td>
-        <td>Sound reinforcement for sanctuary</td>
-        <td>1</td>
-        <td>Sanctuary</td>
-        <td>2016</td>
-        <td>Semi-annual inspection; cable check monthly</td>
-        <td>$8,000</td>
-      </tr>
-      <tr>
-        <td>9</td>
-        <td>Digital Mixing Console</td>
-        <td>Audio mixing for live worship</td>
-        <td>1</td>
-        <td>Sound Booth</td>
-        <td>2020</td>
-        <td>Firmware updates as released; annual cleaning</td>
-        <td>$3,500</td>
-      </tr>
-      <tr>
-        <td>10</td>
-        <td>Wireless Microphone System</td>
-        <td>Vocals / handheld mics for worship leaders</td>
-        <td>4</td>
-        <td>Sound Booth</td>
-        <td>2021</td>
-        <td>Battery replacement weekly; transmitter check monthly</td>
-        <td>$2,800</td>
-      </tr>
-      <tr>
-        <td>11</td>
-        <td>Wired Microphone (SM58)</td>
-        <td>Backup vocals / choir mics</td>
-        <td>6</td>
-        <td>Sound Booth</td>
-        <td>2018</td>
-        <td>Capsule cleaning every 6 months</td>
-        <td>$660</td>
-      </tr>
-      <tr>
-        <td>12</td>
-        <td>Monitor Speakers (Stage)</td>
-        <td>In-ear / stage monitors for musicians</td>
-        <td>4</td>
-        <td>Stage / Sanctuary</td>
-        <td>2019</td>
-        <td>Annual inspection; driver check every 6 months</td>
-        <td>$1,600</td>
-      </tr>
-      <tr>
-        <td>13</td>
-        <td>Keyboard / Synthesizer</td>
-        <td>Keys / pads for worship band</td>
-        <td>1</td>
-        <td>Stage / Sanctuary</td>
-        <td>2022</td>
-        <td>Software/firmware updates; annual cleaning</td>
-        <td>$1,800</td>
-      </tr>
-      <tr>
-        <td>14</td>
-        <td>Music Stands</td>
-        <td>Sheet music support for choir &amp; orchestra</td>
-        <td>20</td>
-        <td>Choir Room</td>
-        <td>2016</td>
-        <td>Inspect for stability annually</td>
-        <td>$600</td>
-      </tr>
-      <tr>
-        <td>15</td>
-        <td>Choir Robes</td>
-        <td>Uniform attire for choir</td>
-        <td>30</td>
-        <td>Choir Room</td>
-        <td>2018</td>
-        <td>Dry clean annually; inspect for wear</td>
-        <td>$2,400</td>
-      </tr>
+    <tbody id="inventory-body">
+      <!-- Rows rendered by JavaScript -->
     </tbody>
   </table>
+
+  <!-- Add Item Form -->
+  <div class="add-form">
+    <h2>Add New Item</h2>
+    <form id="add-item-form" onsubmit="handleAddItem(event)">
+      <div class="form-grid">
+        <label>Item Name <input type="text" id="f-name" placeholder="e.g. Trumpet" required></label>
+        <label>Purpose <input type="text" id="f-purpose" placeholder="e.g. Brass section / worship band" required></label>
+        <label>Quantity <input type="number" id="f-qty" placeholder="1" min="1" required></label>
+        <label>Location <input type="text" id="f-location" placeholder="e.g. Music Room" required></label>
+        <label>Purchase Year <input type="number" id="f-year" placeholder="2024" min="1900" max="2100" required></label>
+        <label>Maintenance Schedule <input type="text" id="f-maintenance" placeholder="e.g. Annual inspection" required></label>
+        <label>Value (USD) <input type="text" id="f-value" placeholder="e.g. $500" required></label>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-add">Add Item</button>
+        <span class="msg-saved" id="msg-saved">Saved!</span>
+      </div>
+    </form>
+  </div>
 
   <br>
   <a class="back-link" href="index.html">&larr; Back to Main Page</a>
 
+  <script>
+    var STORAGE_KEY = 'imbc-music-inventory';
+
+    var DEFAULT_ITEMS = [
+      { name: 'Grand Piano', purpose: 'Worship accompaniment / solos', qty: '1', location: 'Sanctuary', year: '2015', maintenance: 'Annual tuning & regulation', value: '$12,000' },
+      { name: 'Digital Drum Kit', purpose: 'Rhythm / percussion for worship band', qty: '1', location: 'Stage / Sanctuary', year: '2019', maintenance: 'Annual inspection; pad replacement as needed', value: '$2,500' },
+      { name: 'Electric Guitar', purpose: 'Lead guitar for worship band', qty: '2', location: 'Music Room', year: '2018', maintenance: 'String replacement every 3 months; annual setup', value: '$900' },
+      { name: 'Bass Guitar', purpose: 'Bass line for worship band', qty: '1', location: 'Music Room', year: '2018', maintenance: 'String replacement every 6 months; annual setup', value: '$750' },
+      { name: 'Acoustic Guitar', purpose: 'Acoustic worship sets / small groups', qty: '2', location: 'Music Room', year: '2020', maintenance: 'String replacement every 3 months', value: '$600' },
+      { name: 'Violin', purpose: 'Orchestral worship / special music', qty: '3', location: 'Music Room', year: '2017', maintenance: 'Bow re-hairing annually; bridge & string check every 6 months', value: '$1,200' },
+      { name: 'Viola', purpose: 'Orchestral worship / special music', qty: '2', location: 'Music Room', year: '2017', maintenance: 'Bow re-hairing annually; string replacement every 6 months', value: '$1,000' },
+      { name: 'PA System (Main)', purpose: 'Sound reinforcement for sanctuary', qty: '1', location: 'Sanctuary', year: '2016', maintenance: 'Semi-annual inspection; cable check monthly', value: '$8,000' },
+      { name: 'Digital Mixing Console', purpose: 'Audio mixing for live worship', qty: '1', location: 'Sound Booth', year: '2020', maintenance: 'Firmware updates as released; annual cleaning', value: '$3,500' },
+      { name: 'Wireless Microphone System', purpose: 'Vocals / handheld mics for worship leaders', qty: '4', location: 'Sound Booth', year: '2021', maintenance: 'Battery replacement weekly; transmitter check monthly', value: '$2,800' },
+      { name: 'Wired Microphone (SM58)', purpose: 'Backup vocals / choir mics', qty: '6', location: 'Sound Booth', year: '2018', maintenance: 'Capsule cleaning every 6 months', value: '$660' },
+      { name: 'Monitor Speakers (Stage)', purpose: 'In-ear / stage monitors for musicians', qty: '4', location: 'Stage / Sanctuary', year: '2019', maintenance: 'Annual inspection; driver check every 6 months', value: '$1,600' },
+      { name: 'Keyboard / Synthesizer', purpose: 'Keys / pads for worship band', qty: '1', location: 'Stage / Sanctuary', year: '2022', maintenance: 'Software/firmware updates; annual cleaning', value: '$1,800' },
+      { name: 'Music Stands', purpose: 'Sheet music support for choir & orchestra', qty: '20', location: 'Choir Room', year: '2016', maintenance: 'Inspect for stability annually', value: '$600' },
+      { name: 'Choir Robes', purpose: 'Uniform attire for choir', qty: '30', location: 'Choir Room', year: '2018', maintenance: 'Dry clean annually; inspect for wear', value: '$2,400' }
+    ];
+
+    function loadItems() {
+      var stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch (e) {}
+      }
+      // First visit: seed with defaults and save
+      saveItems(DEFAULT_ITEMS);
+      return DEFAULT_ITEMS.slice();
+    }
+
+    function saveItems(items) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderTable() {
+      var items = loadItems();
+      var tbody = document.getElementById('inventory-body');
+      var html = '';
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        html += '<tr>' +
+          '<td>' + (i + 1) + '</td>' +
+          '<td>' + escapeHtml(item.name) + '</td>' +
+          '<td>' + escapeHtml(item.purpose) + '</td>' +
+          '<td>' + escapeHtml(item.qty) + '</td>' +
+          '<td>' + escapeHtml(item.location) + '</td>' +
+          '<td>' + escapeHtml(item.year) + '</td>' +
+          '<td>' + escapeHtml(item.maintenance) + '</td>' +
+          '<td>' + escapeHtml(item.value) + '</td>' +
+          '<td><button class="btn-delete" onclick="deleteItem(' + i + ')" title="Delete">&#x2715;</button></td>' +
+          '</tr>';
+      }
+      tbody.innerHTML = html;
+    }
+
+    function handleAddItem(event) {
+      event.preventDefault();
+      var newItem = {
+        name:        document.getElementById('f-name').value.trim(),
+        purpose:     document.getElementById('f-purpose').value.trim(),
+        qty:         document.getElementById('f-qty').value.trim(),
+        location:    document.getElementById('f-location').value.trim(),
+        year:        document.getElementById('f-year').value.trim(),
+        maintenance: document.getElementById('f-maintenance').value.trim(),
+        value:       document.getElementById('f-value').value.trim()
+      };
+      var items = loadItems();
+      items.push(newItem);
+      saveItems(items);
+      renderTable();
+      document.getElementById('add-item-form').reset();
+      var msg = document.getElementById('msg-saved');
+      msg.style.display = 'inline';
+      setTimeout(function() { msg.style.display = 'none'; }, 2000);
+    }
+
+    function deleteItem(index) {
+      var items = loadItems();
+      items.splice(index, 1);
+      saveItems(items);
+      renderTable();
+    }
+
+    // Initial render
+    renderTable();
+  </script>
 </body>
 
 </html>
