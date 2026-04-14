@@ -325,6 +325,78 @@
     }
     .back-link:hover { text-decoration: underline; }
 
+    /* ── PDF BUTTON ─────────────────────────── */
+    .btn-pdf {
+      margin-left: auto;
+      background: rgba(255,255,255,0.15);
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.35);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-pdf:hover { background: rgba(255,255,255,0.25); }
+
+    /* ── PRINT DATE (hidden on screen) ──────── */
+    .print-only { display: none; }
+
+    /* ── PRINT / PDF STYLES ──────────────────── */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      @page { size: landscape; margin: 1.5cm; }
+
+      body { background: white; }
+
+      /* Show print-only elements */
+      .print-only { display: block; font-size: 9pt; color: #64748B; margin-top: 2px; }
+
+      /* Hide screen-only elements */
+      .add-form,
+      .back-link,
+      .status-bar,
+      .actions,
+      .btn-pdf,
+      .modal-overlay { display: none !important; }
+
+      /* Header */
+      .site-header {
+        background: #1E3A5F !important;
+        color: white !important;
+        padding: 10px 16px;
+        -webkit-print-color-adjust: exact !important;
+      }
+      .header-text h1 { font-size: 1rem; }
+
+      /* Main */
+      .main { padding: 10px 0 0; max-width: 100%; }
+
+      /* Stats */
+      .stats-bar { margin-bottom: 10px; gap: 10px; }
+      .stat-card { box-shadow: none; border: 1px solid #E2E8F0; padding: 10px 16px; }
+      .stat-value { font-size: 1.2rem; }
+
+      /* Table */
+      .table-wrapper { box-shadow: none; border: 1px solid #E2E8F0; overflow: visible; }
+      table.inventory { min-width: 0; }
+      table.inventory thead th {
+        background: #2563EB !important;
+        color: white !important;
+        font-size: 7.5pt;
+        padding: 7px 9px;
+      }
+      table.inventory tbody td {
+        font-size: 8.5pt;
+        padding: 6px 9px;
+        border-bottom: 1px solid #F1F5F9;
+      }
+      table.inventory tbody tr:hover td { background: none; }
+    }
+
     /* ── RESPONSIVE ─────────────────────────── */
     @media (max-width: 620px) {
       .site-header { padding: 14px 16px; gap: 12px; }
@@ -360,7 +432,9 @@
     <div class="header-text">
       <h1>Music Ministry Equipment Inventory</h1>
       <p>Immanuel Baptist Church</p>
+      <p class="print-only" id="print-date"></p>
     </div>
+    <button class="btn-pdf" onclick="window.print()">&#x1F4BE; Save as PDF</button>
   </header>
 
   <div class="main">
@@ -481,6 +555,10 @@
       { name: 'Music Stands',             purpose: 'Sheet music support for choir & orchestra',qty: '20', location: 'Choir Room',       year: '2016', maintenance: 'Inspect for stability annually',                              value: '$600'    },
       { name: 'Choir Robes',              purpose: 'Uniform attire for choir',                qty: '30', location: 'Choir Room',       year: '2018', maintenance: 'Dry clean annually; inspect for wear',                        value: '$2,400'  }
     ];
+
+    // Set print date
+    document.getElementById('print-date').textContent =
+      'Printed: ' + new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
 
     const app  = initializeApp(firebaseConfig);
     const db   = getFirestore(app);
